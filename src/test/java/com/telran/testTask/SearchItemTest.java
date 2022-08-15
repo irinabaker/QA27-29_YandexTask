@@ -1,51 +1,31 @@
 package com.telran.testTask;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.BeforeMethod;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-public class SearchItemTest {
-
-    WebDriver wd;
-
-    @BeforeMethod
-    public void setUp() {
-        wd = new ChromeDriver();
-        wd.get("https://yandex.ru/");
-        wd.manage().window().maximize();
-        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-    }
+public class SearchItemTest extends TestBase{
 
     @Test
     public void searchItemTest() {
-        wd.findElement(By.cssSelector("[data-id='market']")).click();
-        switchToNextTab(1);
+        app.selectMarket();
+        app.switchToNextTab(1);
+        app.selectDepartment("Экспресс");
+        app.acceptCookies();
+        app.selectCatalog("elektronika/23282330");
+        app.selectCategoryType("smartfony-i-aksessuary/23282379");
+        app.filterItem(new Item().setPriceFrom("20000")
+                .setPriceTo("35000")
+                .setBrand("Apple"));
+        app.pause(10000);
+        String itemName = app.getItemNameFromListByNumber(3);
+        System.out.println(itemName);
+        app.typeInSearchInputField(itemName);
+        app.pause(10000);
+        String foundItemName = app.getItemNameFromListByNumber(2);
+        System.out.println(foundItemName);
+        Assert.assertEquals(foundItemName,itemName);
     }
 
-    public void switchToNextTab(int number) {
-        List<String> availableWindows = new ArrayList<>(wd.getWindowHandles());
-        if (!availableWindows.isEmpty()) {
-            wd.switchTo().window(availableWindows.get(number));
-        }
-    }
 }
-
-    /*   Перейти на Яндекс Маркет
-        Выбрать раздел Экспресс
-        Выбрать раздел Электроника
-        Выбрать раздел Смартфоны
-        Зайти в расширенный поиск
-        Задать параметр поиска от 20000 до 35000 рублей.
-        Выбрать производителя “Apple”
-        Применить условия поиска
-        Запомнить второй элемент в результатах поиска
-        В поисковую строку ввести запомненное значение.
-        Найти и проверить, что наименование товара соответствует запомненному значению.*/
 
 
