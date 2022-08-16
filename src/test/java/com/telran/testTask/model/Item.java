@@ -1,4 +1,4 @@
-package com.telran.testTask;
+package com.telran.testTask.model;
 
 public class Item {
 

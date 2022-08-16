@@ -1,5 +1,6 @@
-package com.telran.testTask;
+package com.telran.testTask.tests;
 
+import com.telran.testTask.fw.ApplicationManager;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
